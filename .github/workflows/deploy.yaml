@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HOST: root@80.78.243.60
-      DEPLOY_DIRECTORY: /root/apps/reg_ru
-      CONFIG_PATH: /root/apps/reg_ru/config/prod.yaml
-      ENV_FILE_PATH: /root/apps/reg_ru/config.env
+      DEPLOY_DIRECTORY: /root/apps/tag_bot
+      CONFIG_PATH: /root/apps/tag_bot/config/prod.yaml
+      ENV_FILE_PATH: /root/apps/tag_bot/config.env
 
     steps:
       - name: Checkout repository
@@ -35,7 +35,7 @@ jobs:
       - name: Build app
         run: |
           go mod download
-          go build -o reg_ru ./cmd/api
+          go build -o tag_bot ./cmd/api
       - name: Deploy to VM
         run: |
           sudo apt-get install -y ssh rsync
@@ -47,7 +47,7 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
       - name: Remove old systemd service file
         run: |
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "rm -f /etc/systemd/system/reg_ru.service"
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "rm -f /etc/systemd/system/tag_bot.service"
       - name: List workspace contents
         run: |
           echo "Listing deployment folder contents:"
@@ -61,8 +61,8 @@ jobs:
           echo 'HTTP_SERVER_PASSWORD=${{ secrets.AUTH_PASS }}' >> ${{ env.ENV_FILE_PATH }}"
       - name: Copy systemd service file
         run: |
-          scp -i deploy_key.pem -o StrictHostKeyChecking=no ${{ github.workspace }}/deployment/reg_ru.service ${{ env.HOST }}:/tmp/reg_ru.service
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "mv /tmp/reg_ru.service /etc/systemd/system/reg_ru.service"
+          scp -i deploy_key.pem -o StrictHostKeyChecking=no ${{ github.workspace }}/deployment/tag_bot.service ${{ env.HOST }}:/tmp/tag_bot.service
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "mv /tmp/tag_bot.service /etc/systemd/system/tag_bot.service"
       - name: Start application
         run: |
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "systemctl daemon-reload && systemctl restart reg_ru.service"
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "systemctl daemon-reload && systemctl restart tag_bot.service"

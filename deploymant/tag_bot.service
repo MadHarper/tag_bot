@@ -4,12 +4,12 @@ After=network.target
 
 [Service]
 User=root
-WorkingDirectory=/root/apps/reg_ru
-ExecStart=/root/apps/reg_ru/reg_ru
+WorkingDirectory=/root/apps/tag_bot
+ExecStart=/root/apps/tag_bot/tag_bot
 Restart=always
 RestartSec=4
 StandardOutput=inherit
-EnvironmentFile=/root/apps/reg_ru/config.env
+EnvironmentFile=/root/apps/tag_bot/config.env
 
 [Install]
 WantedBy=multi-user.target

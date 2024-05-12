@@ -1,4 +1,4 @@
-module reg_ru
+module tag_bot
 
 go 1.22.2
 
