@@ -1,0 +1,15 @@
+[Unit]
+Description=Tag Bot
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/apps/reg_ru
+ExecStart=/root/apps/reg_ru/reg_ru
+Restart=always
+RestartSec=4
+StandardOutput=inherit
+EnvironmentFile=/root/apps/reg_ru/config.env
+
+[Install]
+WantedBy=multi-user.target
